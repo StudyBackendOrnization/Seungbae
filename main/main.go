@@ -7,7 +7,8 @@ import (
 func main() {
 	//showBoard(solution(3))
 	//showBoard(solution(5))
-	showBoard(solution(7))
+	showBoard(solution(4))
+	//showBoard(solution(8))
 }
 
 func showBoard(board [][]int) {
@@ -28,6 +29,9 @@ func makeBoard(number int) [][]int {
 func solution(number int) [][]int {
 	board := makeBoard(number)
 	if number%2 == 0 {
+		if number%4 == 0 {
+			return fourEvenSolve(board, number, number/4)
+		}
 		return evenSolve(board, number, number/2, 0, 1)
 	}
 	return oddSolve(board, number, number/2, 0, 1, 0)
@@ -64,6 +68,30 @@ func oddSwitch(dx int, dy int, number int) (int, int) {
 	}
 
 	return dx, dy
+}
+
+func fourEvenSolve(board [][]int, number int, row int) [][]int {
+	count := 1
+	for i := 0; i < number; i++ {
+		for j := 0; j < number; j++ {
+			board[i][j] = count
+			count++
+		}
+	}
+
+	for i := 0; i < row; i++ {
+		for j := row; j < number-row; j++ {
+			tmp1 := board[number-1-i][number-1-j]
+			board[number-1-i][number-1-j] = board[i][j]
+			board[i][j] = tmp1
+
+			tmp2 := board[number-1-j][number-1-i]
+			board[number-1-j][number-1-i] = board[j][i]
+			board[j][i] = tmp2
+		}
+	}
+
+	return board
 }
 
 func evenSolve(board [][]int, number int, dx int, dy int, count int) [][]int {
